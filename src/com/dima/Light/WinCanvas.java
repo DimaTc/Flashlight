@@ -124,16 +124,18 @@ public class WinCanvas extends Canvas implements Runnable{
 		
 		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
 		//
-		g.setColor(Color.white);
+		g.setColor(Color.DARK_GRAY);
 		g.fillRect(0, 0, dim.width, dim.height);
 		if(kh.isPicureOn())
 			g.drawImage(image, 0, 0, dim.width, dim.height,null);
 		g.setColor(new Color(0xaa2222));
 		g.setColor(Color.red);
-		if(kh.isLinesOn()){
-			for(Point p : box.getFarPoint(mh.getPoint())){
+		if(kh.isLinesOn())
+			for(Point p : box.getEdgePoints(mh.getPoint())){
 				g.drawLine(p.x, p.y, mh.getX(),mh.getY());
 			}
+//			g.drawLine(box.getFarPoint(mh.getPoint()).x, box.getFarPoint(mh.getPoint()).y, mh.getX(), mh.getY());
+		else{
 			g.setColor(Color.orange);
 			for(int i = 0 ; i < 4; i++){
 				g.drawLine(mh.getX(), mh.getY(), tempPoints[i].x, tempPoints[i].y);
