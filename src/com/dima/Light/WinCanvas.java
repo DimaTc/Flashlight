@@ -119,7 +119,9 @@ public class WinCanvas extends Canvas implements Runnable{
 		
 		box.update();
 		shadow.setMousePoint(mh.getPoint());
+		shadow.setPoints(box.getEdgePoints(mh.getPoint()));
 		shadow.update();
+		
 	}
 	
 	public void draw(){
@@ -139,12 +141,11 @@ public class WinCanvas extends Canvas implements Runnable{
 		g.setColor(new Color(0xaa2222));
 		g.setColor(Color.red);
 		shadow.draw(g);
-		if(kh.isLinesOn())
+		if(kh.isLinesOn()){
 			for(Point p : box.getEdgePoints(mh.getPoint())){
 				g.drawLine(p.x, p.y, mh.getX(),mh.getY());
 			}
 //			g.drawLine(box.getFarPoint(mh.getPoint()).x, box.getFarPoint(mh.getPoint()).y, mh.getX(), mh.getY());
-		else{
 			g.setColor(Color.black);
 			for(int i = 0 ; i < 4; i++){
 				g.drawLine(mh.getX(), mh.getY(), tempPoints[i].x, tempPoints[i].y);
