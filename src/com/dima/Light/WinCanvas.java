@@ -1,4 +1,3 @@
-package com.dima.Light;
 
 import java.awt.AlphaComposite;
 import java.awt.Canvas;

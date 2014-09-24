@@ -1,4 +1,3 @@
-package com.dima.Light;
 
 import javax.swing.JFrame;
 
