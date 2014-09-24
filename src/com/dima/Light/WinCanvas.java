@@ -35,7 +35,8 @@ public class WinCanvas extends Canvas implements Runnable{
 	private MouseHandler mh;
 	private KeyHandler kh;
 	//
-	private Shadow shadow;
+	private Shadow shadow1;
+	private Shadow shadow2;
 	private Box box;
 	private Box box1;
 	//
@@ -50,11 +51,12 @@ public class WinCanvas extends Canvas implements Runnable{
 		setMaximumSize(dim);
 		setMinimumSize(dim);
 		box = new Box(550,400,40);
-		box1 = new Box(350,200,20);
+		box1 = new Box(350,200,30);
 		light = new LightSource(450);
 		mh = new MouseHandler();
 		kh = new KeyHandler();
-		shadow = new Shadow(box.getEdgePoints(mh.getPoint())[0], box.getEdgePoints(mh.getPoint())[1], mh.getPoint());
+		shadow1 = new Shadow(box.getEdgePoints(mh.getPoint())[0], box.getEdgePoints(mh.getPoint())[1], mh.getPoint());
+		shadow2 = new Shadow(box1.getEdgePoints(mh.getPoint())[0], box1.getEdgePoints(mh.getPoint())[1], mh.getPoint());
 		
 		addMouseMotionListener(mh);
 		addKeyListener(kh);
@@ -115,9 +117,12 @@ public class WinCanvas extends Canvas implements Runnable{
 	}
 	
 	public void update(){
-		shadow.setMousePoint(mh.getPoint());
-		shadow.setPoints(box.getEdgePoints(mh.getPoint()));
-		shadow.update();
+		shadow1.setMousePoint(mh.getPoint());
+		shadow1.setPoints(box.getEdgePoints(mh.getPoint()));
+		shadow1.update();
+		shadow2.setMousePoint(mh.getPoint());
+		shadow2.setPoints(box1.getEdgePoints(mh.getPoint()));
+		shadow2.update();
 		if(!kh.isCursorOn())
 			setCursor(getToolkit().createCustomCursor(new BufferedImage(3,3,BufferedImage.TYPE_INT_ARGB),new Point(0,0),"null"));
 		else
@@ -153,8 +158,9 @@ public class WinCanvas extends Canvas implements Runnable{
 				g.drawLine(mh.getX(), mh.getY(), corenerPoints[i].x, corenerPoints[i].y);
 			}
 		}
+		shadow2.draw(g);
 		box1.draw(g);
-		shadow.draw(g);
+		shadow1.draw(g);
 		box.draw(g);
 		g.setComposite(AlphaComposite.SrcAtop);
 		if(kh.isLightsOn())
