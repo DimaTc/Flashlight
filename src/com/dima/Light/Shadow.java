@@ -1,3 +1,5 @@
+package com.dima.Light;
+
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -19,7 +21,8 @@ public class Shadow {
 	private int shadow0Y;
 	private int shadow1X;
 	private int shadow1Y;
-	Polygon[] areas = new Polygon[4];
+	private Polygon shadow = new Polygon();
+	private Polygon[] areas = new Polygon[4];
 	public Shadow(Point p1, Point p2, Point mousePoint){
 		this.points[0] = p1;
 		this.points[1] = p2;
@@ -44,65 +47,116 @@ public class Shadow {
 			if(areas[i].contains(points[1])){
 				id2 = i;
 			}
-			
-			if(id1 != id2){
-				shadowPointsAmount = 5;
-				shadowPoints = new Point[5];
-			}
-			else{
-				shadowPointsAmount = 4;
-				shadowPoints = new Point[4];
-			}
-			
-			switch(id1){
-			case 0 :
-				shadow0Y = 0;
-				shadow0X =(int)( ((shadow0Y - points[0].y) / -m0) - points[0].x);
-				break;
-			case 1 :
-				shadow0X = WinCanvas.WIDTH * WinCanvas.SCALE;				
-				shadow0Y = (int)(-m0 * (shadow0X - points[0].x) - points[0].y);
-				break;
-			case 2 :
-				shadow0Y = WinCanvas.HEIGHT * WinCanvas.SCALE;
-				shadow0X =(int)( ((shadow0Y - points[0].y) / -m0) - points[0].x);
-				break;
-			case 3 :
-				shadow0X = 0;				
-				shadow0Y = (int)(-m0 * (shadow0X - points[0].x) - points[0].y);
-				break;
-			default:
-				break;
-			}
-			
-			switch(id2){
-			case 0 :
-				shadow1Y = 0;
-				shadow1X =(int)( ((shadow1Y - points[1].y) / -m1) - points[1].x);
-				break;
-			case 1 :
-				shadow1X = WinCanvas.WIDTH * WinCanvas.SCALE;	
-				shadow1Y = (int)(-m1 * (shadow1X - points[1].x) - points[1].y);
-				break;
-			case 2 :
-				shadow1Y = WinCanvas.HEIGHT * WinCanvas.SCALE;
-				shadow1X =(int)( ((shadow1Y - points[1].y) / -m1) - points[1].x);
-				break;
-			case 3 :
-				shadow1X = 0;				
-				shadow1Y = (int)(-m1 * (shadow1X - points[1].x) - points[1].y);
-				break;
-			default:
-				break;
-			}
-			
-			shadow0X = Math.abs(shadow0X);
-			shadow0Y = Math.abs(shadow0Y);
-			shadow1X = Math.abs(shadow1X);
-			shadow1Y = Math.abs(shadow1Y);
-			
-
 		}
+		switch(id1){
+		case 0 :
+			shadow0Y = 0;
+			shadow0X =(int)( ((shadow0Y - points[0].y) / -m0) - points[0].x);
+			break;
+		case 1 :
+			shadow0X = WinCanvas.WIDTH * WinCanvas.SCALE;				
+			shadow0Y = (int)(-m0 * (shadow0X - points[0].x) - points[0].y);
+			break;
+		case 2 :
+			shadow0Y = WinCanvas.HEIGHT * WinCanvas.SCALE;
+			shadow0X =(int)( ((shadow0Y - points[0].y) / -m0) - points[0].x);
+			break;
+		case 3 :
+			shadow0X = 0;				
+			shadow0Y = (int)(-m0 * (shadow0X - points[0].x) - points[0].y);
+			break;
+		default:
+			break;
+		}
+		
+		switch(id2){
+		case 0 :
+			shadow1Y = 0;
+			shadow1X =(int)( ((shadow1Y - points[1].y) / -m1 + 0.000001) - points[1].x);
+			break;
+		case 1 :
+			shadow1X = WinCanvas.WIDTH * WinCanvas.SCALE;	
+			shadow1Y = (int)(-m1 * (shadow1X - points[1].x) - points[1].y);
+			break;
+		case 2 :
+			shadow1Y = WinCanvas.HEIGHT * WinCanvas.SCALE;
+			shadow1X =(int)( ((shadow1Y - points[1].y) / -m1 + 0.000001) - points[1].x);
+			break;
+		case 3 :
+			shadow1X = 0;				
+			shadow1Y = (int)(-m1 * (shadow1X - points[1].x) - points[1].y);
+			break;
+		default:
+			break;
+		}
+		
+		shadow0X = Math.abs(shadow0X);
+		shadow0Y = Math.abs(shadow0Y);
+		shadow1X = Math.abs(shadow1X);
+		shadow1Y = Math.abs(shadow1Y);
+		
+		
+		if(id1 != id2){
+			shadowPointsAmount = 5;
+			shadowPoints = new Point[5];
+		}
+		else{
+			shadowPointsAmount = 4;
+			shadowPoints = new Point[4];
+		}
+		
+		if(shadowPointsAmount == 4){
+			shadowPoints[2] = new Point(shadow1X, shadow1Y);
+			shadowPoints[3] = new Point(shadow0X, shadow0Y);
+		}
+		else{
+
+			shadowPoints[2] = new Point(shadow1X, shadow1Y);
+			switch(id1){
+			case 0:
+				if(id2 == 1)
+					shadowPoints[3] = new Point(WinCanvas.WIDTH * WinCanvas.SCALE, 0);
+				else
+					shadowPoints[3] = new Point(0, 0);
+				break;
+					
+			case 1:
+				if(id2 == 0)
+					shadowPoints[3] = new Point(WinCanvas.WIDTH * WinCanvas.SCALE, 0);
+				else
+					shadowPoints[3] = new Point(WinCanvas.WIDTH * WinCanvas.SCALE, WinCanvas.HEIGHT * WinCanvas.SCALE);
+				break;
+				
+			case 2:
+				if(id2 == 1)
+					shadowPoints[3] = new Point(WinCanvas.WIDTH * WinCanvas.SCALE, WinCanvas.HEIGHT * WinCanvas.SCALE);
+				else
+					shadowPoints[3] = new Point(0, WinCanvas.HEIGHT * WinCanvas.SCALE);
+				break;
+				
+			case 3:
+				if(id2 == 2)
+					shadowPoints[3] = new Point(0, WinCanvas.HEIGHT * WinCanvas.SCALE);
+				else
+					shadowPoints[3] = new Point(0, 0);
+				break;
+				
+			}
+			shadowPoints[4] = new Point(shadow0X, shadow0Y);
+		}
+		for(int i = 0; i < 2; i++){
+			shadowPoints[i] = points[i];
+		}
+		int[] xPoints = new int[shadowPointsAmount];
+		int[] yPoints = new int[shadowPointsAmount];
+		for(int i = 0; i < shadowPointsAmount; i++){
+			xPoints[i] = shadowPoints[i].x;
+			yPoints[i] = shadowPoints[i].y;
+		}
+		shadow.xpoints = xPoints;
+		shadow.ypoints = yPoints;
+		shadow.npoints = shadowPointsAmount;
+			
 	}
 	
 	public void update(){
@@ -119,11 +173,7 @@ public class Shadow {
 		this.mousePoint = mouse;
 	}
 	public void draw(Graphics2D g){
-		g.setColor(Color.red);
-		g.drawString(Double.toString(m0), 40, 120);
-		g.drawString(Double.toString(m1), 40, 160);
-		
-		g.drawLine(shadow0X, shadow0Y, points[0].x, points[0].y);
-		g.drawLine(shadow1X, shadow1Y, points[1].x, points[1].y);
+		g.setColor(Color.black);
+		g.fill(shadow);
 	}
 }

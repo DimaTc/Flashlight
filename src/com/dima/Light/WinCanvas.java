@@ -1,3 +1,5 @@
+package com.dima.Light;
+
 
 import java.awt.AlphaComposite;
 import java.awt.Canvas;
@@ -18,7 +20,7 @@ public class WinCanvas extends Canvas implements Runnable{
 
 	public static final int WIDTH = 320;
 	public static final int HEIGHT = 240;
-	public static final int SCALE = 2;
+	public static final int SCALE = 3;
 	
 	private static final Dimension dim  = new Dimension(WIDTH * SCALE, HEIGHT * SCALE);		
 	private BufferedImage image;
@@ -35,6 +37,7 @@ public class WinCanvas extends Canvas implements Runnable{
 	//
 	private Shadow shadow;
 	private Box box;
+	private Box box1;
 	//
 	private int fps = 0;
 	private int ups = 0;
@@ -46,7 +49,8 @@ public class WinCanvas extends Canvas implements Runnable{
 		setPreferredSize(dim);
 		setMaximumSize(dim);
 		setMinimumSize(dim);
-		box = new Box(250,180,40);
+		box = new Box(550,400,40);
+		box1 = new Box(350,200,20);
 		light = new LightSource(450);
 		mh = new MouseHandler();
 		kh = new KeyHandler();
@@ -117,6 +121,7 @@ public class WinCanvas extends Canvas implements Runnable{
 			setCursor(Cursor.getDefaultCursor());
 		
 		box.update();
+		box1.update();
 		shadow.setMousePoint(mh.getPoint());
 		shadow.setPoints(box.getEdgePoints(mh.getPoint()));
 		shadow.update();
@@ -151,7 +156,8 @@ public class WinCanvas extends Canvas implements Runnable{
 			}
 		}
 		box.draw(g);
-		g.setComposite(AlphaComposite.DstOut);
+		box1.draw(g);
+		g.setComposite(AlphaComposite.SrcAtop);
 		if(kh.isLightsOn())
 			g.drawImage(light.getLightMap(),(-dim.width / 2) - (dim.width / 2) + mh.getX(),(-dim.height / 2) - (dim.height/ 2) + mh.getY(),null);
 		//

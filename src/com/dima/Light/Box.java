@@ -1,3 +1,5 @@
+package com.dima.Light;
+
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -9,7 +11,6 @@ public class Box {
 	private int y;
 	private int size;
 	private Point[] points;
-	
 	public Box(int x, int y, int size){
 		this.x = x;
 		this.y = y;
