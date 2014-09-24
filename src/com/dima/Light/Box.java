@@ -104,7 +104,6 @@ public class Box {
 	public int getSize(){
 		return size;
 	}
-	
 	public void update(){
 		points[0] = new Point(x ,y);
 		points[1] = new Point(x ,y + size);

@@ -10,6 +10,7 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 
@@ -26,11 +27,16 @@ public class WinCanvas extends Canvas implements Runnable{
 	private boolean running;
 	private Thread thread;
 	private LightSource light;
+
+	private LinkedList<Box> boxes = new LinkedList<Box>();
+	private LinkedList<Shadow> Shadowes= new LinkedList<Shadow>();
 	
 	private MouseHandler mh;
 	private KeyHandler kh;
-	
+	//
+	private Shadow shadow;
 	private Box box;
+	//
 	private int fps = 0;
 	private int ups = 0;
 
@@ -43,9 +49,9 @@ public class WinCanvas extends Canvas implements Runnable{
 		setMinimumSize(dim);
 		box = new Box(250,180,40);
 		light = new LightSource(450);
-		
 		mh = new MouseHandler();
 		kh = new KeyHandler();
+		shadow = new Shadow(box.getEdgePoints(mh.getPoint())[0], box.getEdgePoints(mh.getPoint())[1], mh.getPoint());
 		
 		addMouseMotionListener(mh);
 		addKeyListener(kh);
@@ -112,6 +118,8 @@ public class WinCanvas extends Canvas implements Runnable{
 			setCursor(Cursor.getDefaultCursor());
 		
 		box.update();
+		shadow.setMousePoint(mh.getPoint());
+		shadow.update();
 	}
 	
 	public void draw(){
@@ -130,13 +138,14 @@ public class WinCanvas extends Canvas implements Runnable{
 			g.drawImage(image, 0, 0, dim.width, dim.height,null);
 		g.setColor(new Color(0xaa2222));
 		g.setColor(Color.red);
+		shadow.draw(g);
 		if(kh.isLinesOn())
 			for(Point p : box.getEdgePoints(mh.getPoint())){
 				g.drawLine(p.x, p.y, mh.getX(),mh.getY());
 			}
 //			g.drawLine(box.getFarPoint(mh.getPoint()).x, box.getFarPoint(mh.getPoint()).y, mh.getX(), mh.getY());
 		else{
-			g.setColor(Color.orange);
+			g.setColor(Color.black);
 			for(int i = 0 ; i < 4; i++){
 				g.drawLine(mh.getX(), mh.getY(), tempPoints[i].x, tempPoints[i].y);
 			}
