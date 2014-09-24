@@ -43,7 +43,7 @@ public class WinCanvas extends Canvas implements Runnable{
 	private int ups = 0;
 
 	// temp
-	private Point[] tempPoints = new Point[4];
+	private Point[] corenerPoints = new Point[4];
 	//
 	public WinCanvas(){
 		setPreferredSize(dim);
@@ -59,10 +59,10 @@ public class WinCanvas extends Canvas implements Runnable{
 		addMouseMotionListener(mh);
 		addKeyListener(kh);
 		
-		tempPoints[0] = new Point(0,0);
-		tempPoints[1] = new Point(0, dim.height);
-		tempPoints[2] = new Point(dim.width, 0);
-		tempPoints[3] = new Point(dim.width, dim.height);
+		corenerPoints[0] = new Point(0,0);
+		corenerPoints[1] = new Point(0, dim.height);
+		corenerPoints[2] = new Point(dim.width, 0);
+		corenerPoints[3] = new Point(dim.width, dim.height);
 		
 		try {
 			image = ImageIO.read(getClass().getResource("/2.jpg"));
@@ -115,6 +115,9 @@ public class WinCanvas extends Canvas implements Runnable{
 	}
 	
 	public void update(){
+		shadow.setMousePoint(mh.getPoint());
+		shadow.setPoints(box.getEdgePoints(mh.getPoint()));
+		shadow.update();
 		if(!kh.isCursorOn())
 			setCursor(getToolkit().createCustomCursor(new BufferedImage(3,3,BufferedImage.TYPE_INT_ARGB),new Point(0,0),"null"));
 		else
@@ -122,9 +125,6 @@ public class WinCanvas extends Canvas implements Runnable{
 		
 		box.update();
 		box1.update();
-		shadow.setMousePoint(mh.getPoint());
-		shadow.setPoints(box.getEdgePoints(mh.getPoint()));
-		shadow.update();
 		
 	}
 	
@@ -143,20 +143,19 @@ public class WinCanvas extends Canvas implements Runnable{
 		if(kh.isPicureOn())
 			g.drawImage(image, 0, 0, dim.width, dim.height,null);
 		g.setColor(new Color(0xaa2222));
-		g.setColor(Color.red);
-		shadow.draw(g);
+		g.setColor(Color.black);
 		if(kh.isLinesOn()){
 			for(Point p : box.getEdgePoints(mh.getPoint())){
 				g.drawLine(p.x, p.y, mh.getX(),mh.getY());
 			}
-//			g.drawLine(box.getFarPoint(mh.getPoint()).x, box.getFarPoint(mh.getPoint()).y, mh.getX(), mh.getY());
 			g.setColor(Color.black);
 			for(int i = 0 ; i < 4; i++){
-				g.drawLine(mh.getX(), mh.getY(), tempPoints[i].x, tempPoints[i].y);
+				g.drawLine(mh.getX(), mh.getY(), corenerPoints[i].x, corenerPoints[i].y);
 			}
 		}
-		box.draw(g);
 		box1.draw(g);
+		shadow.draw(g);
+		box.draw(g);
 		g.setComposite(AlphaComposite.SrcAtop);
 		if(kh.isLightsOn())
 			g.drawImage(light.getLightMap(),(-dim.width / 2) - (dim.width / 2) + mh.getX(),(-dim.height / 2) - (dim.height/ 2) + mh.getY(),null);

@@ -160,9 +160,9 @@ public class Shadow {
 	}
 	
 	public void update(){
-		calculateEdge();
 		m0 = (mousePoint.y - points[0].y) / ((mousePoint.x - points[0].x) + 0.000000001);
 		m1 = (mousePoint.y - points[1].y) / ((mousePoint.x - points[1].x) + 0.000000001);
+		calculateEdge();
 		
 		
 	}
